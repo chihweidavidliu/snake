@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import shortid from "shortid";
 import styled from "styled-components";
 import { useGameContext } from "../context/GameContext";
@@ -10,16 +10,18 @@ const ScoresWrapper = styled.div`
   right: -320px;
   top: 0px;
   display: grid;
-  grid-template-rows: 150px 1fr;
+  grid-template-rows: max-content 1fr;
 `;
 
 const H2 = styled.h2`
   margin: 0;
+  font-size: 20px;
 `;
 
 const CurrentScore = styled.h2`
   margin: 0;
-  font-size: 30px;
+  font-size: 40px;
+  padding: 15px 0px;
 `;
 
 const Scores = () => {

@@ -20,9 +20,6 @@ import { useHighScores } from "./hooks/useHighScores";
 import { IScore } from "./types/highScores";
 
 const GlobalStyle = createGlobalStyle`
-
-
-
 html {
   box-sizing: border-box;
   padding: 0;
@@ -46,7 +43,7 @@ const theme = {
 
 const H1 = styled.h1`
   margin: 0;
-  margin-top: 10px;
+  margin-top: 30px;
   font-size: 36px;
 `;
 
