@@ -13,12 +13,15 @@ import { useDirectionController } from "./hooks/useDirectionController";
 import { useMovementController } from "./hooks/useMovementController";
 import { GameContext } from "./context/GameContext";
 import { checkForOverlap } from "./util/checkForOverlap";
+import Scores from "./components/Scores";
 
 const GlobalStyle = createGlobalStyle`
+
 html {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: 'Nunito', sans-serif;
 }
 *, *:before, *:after {
   box-sizing: inherit;
@@ -26,12 +29,15 @@ html {
   body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
+    font-family: 'Nunito', sans-serif;
+    color: white;
   }
 `;
 
 const H1 = styled.h1`
   margin: 0;
+  margin-top: 10px;
+  font-size: 36px;
 `;
 
 const AppWrapper = styled.div`
@@ -40,8 +46,36 @@ const AppWrapper = styled.div`
   display: grid;
   grid-template-rows: max-content max-content 1fr;
   grid-gap: 20px;
-  background: teal;
+  background: #00404f;
   justify-items: center;
+`;
+
+const StartButton = styled.button`
+  width: 100px;
+  height: 50px;
+  align-self: center;
+  justify-self: center;
+  background: none;
+  color: white;
+  border: 3px solid white;
+  border-radius: 25px;
+  font-size: 24px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: #51ac30;
+    border: 3px solid #51ac30;
+    outline: none;
+  }
+  transition: all 0.2s;
+`;
+
+const MainContent = styled.div`
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 30px;
 `;
 
 const PlayArea = styled.div<{ size: number }>`
@@ -54,13 +88,20 @@ const PlayArea = styled.div<{ size: number }>`
 
 const OptionsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: max-content 1fr;
   grid-template-rows: max-content max-content;
+  grid-gap: 30px;
+  align-items: center;
+`;
+
+const RadioWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, minmax(50px, 150px));
 `;
 
 export default function App() {
   const pixelSize = 20;
-  const areaSize = 800;
+  const areaSize = 600;
   const midpoint = Math.round(areaSize / 2);
   const [isStarted, setIsStarted] = useState(false);
   const [difficulty, setDifficulty] = useState(Difficulty.MEDIUM);
@@ -137,23 +178,26 @@ export default function App() {
     >
       <GlobalStyle />
       <AppWrapper className="App">
-        <div>
-          <H1>Snake</H1>
-        </div>
-        <OptionsWrapper>
-          <button onClick={() => setIsStarted(true)}>Start</button>
+        <H1>Snake</H1>
 
-          <div>
+        <OptionsWrapper>
+          <StartButton onClick={() => setIsStarted(true)}>Start</StartButton>
+
+          <RadioWrapper>
             <DifficultyRadio difficultyLevel={Difficulty.EASY} />
             <DifficultyRadio difficultyLevel={Difficulty.MEDIUM} />
             <DifficultyRadio difficultyLevel={Difficulty.HARD} />
             <DifficultyRadio difficultyLevel={Difficulty.SUPERHUMAN} />
-          </div>
+          </RadioWrapper>
         </OptionsWrapper>
-        <PlayArea size={areaSize}>
-          <Food />
-          <Snake />
-        </PlayArea>
+
+        <MainContent>
+          <PlayArea size={areaSize}>
+            <Food />
+            <Snake />
+          </PlayArea>
+          <Scores />
+        </MainContent>
       </AppWrapper>
     </GameContext.Provider>
   );
