@@ -17,7 +17,6 @@ const Apple = styled.div<IAppleProps>`
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
   background: red;
-  transition: all 0.1s;
   border-radius: 8px;
 
   &::after {
