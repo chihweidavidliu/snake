@@ -30,12 +30,16 @@ html {
   }
 `;
 
+const H1 = styled.h1`
+  margin: 0;
+`;
+
 const AppWrapper = styled.div`
   min-height: 100vh;
-  max-height: 1200px;
   min-width: 100vw;
   display: grid;
-  grid-template-rows: max-content 1fr;
+  grid-template-rows: max-content max-content 1fr;
+  grid-gap: 20px;
   background: teal;
   justify-items: center;
 `;
@@ -56,7 +60,7 @@ const OptionsWrapper = styled.div`
 
 export default function App() {
   const pixelSize = 20;
-  const areaSize = 1000;
+  const areaSize = 800;
   const midpoint = Math.round(areaSize / 2);
   const [isStarted, setIsStarted] = useState(false);
   const [difficulty, setDifficulty] = useState(Difficulty.MEDIUM);
@@ -76,6 +80,7 @@ export default function App() {
   // reset to orifinal position when game ends
   useEffect(() => {
     if (!isStarted) {
+      setDirection(Direction.RIGHT);
       setSnakePosition([
         {
           positionX: midpoint,
@@ -87,26 +92,13 @@ export default function App() {
         },
       ]);
     }
-  }, [isStarted, midpoint, setSnakePosition]);
+  }, [isStarted, midpoint, setDirection, setSnakePosition]);
 
   // track coordinates and end game if snake is out of bounds
   useEffect(() => {
     const checkForOutOfBounds = (snakePosition: IPosition[]) => {
       const firstPixel = snakePosition[0];
-      // if (firstPixel.positionX < 0) {
-      //   console.log("went off left");
-      // }
-      // if (firstPixel.positionX > areaSize) {
-      //   console.log("firstPixel", firstPixel);
-      //   console.log("areaSize", areaSize);
-      //   console.log("went off right");
-      // }
-      // if (firstPixel.positionY < 0) {
-      //   console.log("went off bottom");
-      // }
-      // if (firstPixel.positionY > areaSize) {
-      //   console.log("went off top");
-      // }
+
       return (
         firstPixel.positionX < 0 ||
         firstPixel.positionX > areaSize ||
@@ -116,10 +108,12 @@ export default function App() {
     };
 
     const outOfBounds = checkForOutOfBounds(snakePosition);
-    console.log("outOfBounds", outOfBounds);
-    const overlaps = checkForOverlap(snakePosition[0], snakePosition.slice(1));
+    const snakeOverlapsItself = checkForOverlap(
+      snakePosition[0],
+      snakePosition.slice(1)
+    );
 
-    if (outOfBounds || overlaps) {
+    if (outOfBounds || snakeOverlapsItself) {
       setIsStarted(() => false);
     }
   }, [snakePosition]);
@@ -141,10 +135,10 @@ export default function App() {
         setDifficulty: (difficulty: Difficulty) => setDifficulty(difficulty),
       }}
     >
+      <GlobalStyle />
       <AppWrapper className="App">
-        <GlobalStyle />
         <div>
-          <h1>Snake</h1>
+          <H1>Snake</H1>
         </div>
         <OptionsWrapper>
           <button onClick={() => setIsStarted(true)}>Start</button>

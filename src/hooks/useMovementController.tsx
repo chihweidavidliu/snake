@@ -164,13 +164,13 @@ export const useMovementController = (
     const mapDifficultyToInterval = (difficulty: Difficulty) => {
       switch (difficulty) {
         case Difficulty.EASY:
-          return 150;
-        case Difficulty.MEDIUM:
           return 100;
-        case Difficulty.HARD:
+        case Difficulty.MEDIUM:
           return 75;
-        case Difficulty.SUPERHUMAN:
+        case Difficulty.HARD:
           return 50;
+        case Difficulty.SUPERHUMAN:
+          return 25;
         default:
           return 500;
       }

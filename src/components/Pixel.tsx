@@ -19,7 +19,6 @@ const PixelWrapper = styled.div.attrs<IPixelWrapperProps>((props) => ({
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
   background: ${(props) => (props.isGameStarted ? "black" : "grey")};
-  // transition: all 0.1s;
 `;
 
 interface IPixelProps {
