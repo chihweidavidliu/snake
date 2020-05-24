@@ -138,6 +138,11 @@ const HighScoresModal = ({ finalScore }: IHighScoresProps) => {
             value={name}
             placeholder="Name"
             onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit();
+              }
+            }}
           />
 
           <ButtonWrapper>

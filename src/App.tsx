@@ -17,7 +17,7 @@ import Scores from "./components/Scores";
 import HighScoresModal from "./components/HighScoresModal";
 import { Button } from "./components/Button";
 import { useHighScores } from "./hooks/useHighScores";
-import { IHighScores, IScore } from "./types/highScores";
+import { IScore } from "./types/highScores";
 
 const GlobalStyle = createGlobalStyle`
 
