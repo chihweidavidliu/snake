@@ -16,16 +16,16 @@ export const useMovementController = (
   const [snakePosition, setSnakePosition] = useState<IPosition[]>([
     {
       positionX: midpoint,
-      positionY: midpoint
+      positionY: midpoint,
     },
     {
       positionX: midpoint - pixelSize,
-      positionY: midpoint
-    }
+      positionY: midpoint,
+    },
   ]);
 
   const [foodPosition, setFoodPosition] = useState<IPosition[]>([
-    { positionX: 400, positionY: 200 }
+    { positionX: 400, positionY: 200 },
   ]);
 
   const checkForFood = useCallback(
@@ -33,7 +33,7 @@ export const useMovementController = (
       const firstPixel = snakePosition[0];
 
       const filteredFood = foodPosition.filter(
-        food =>
+        (food) =>
           food.positionX !== firstPixel.positionX ||
           food.positionY !== firstPixel.positionY
       );
@@ -43,11 +43,12 @@ export const useMovementController = (
       if (hasEatenFood) {
         setFoodPosition(() => [
           ...filteredFood,
-          generateRandomPosition(areaSize, pixelSize)
+          generateRandomPosition(areaSize, pixelSize),
         ]);
 
         const lastPixel = snakePosition[snakePosition.length - 1];
-        const secondToLastPixel = snakePosition[snakePosition.length - 1];
+        const secondToLastPixel = snakePosition[snakePosition.length - 2];
+
         // ascertain vector using last two pixels
         const isHorizontal =
           lastPixel.positionY === secondToLastPixel.positionY;
@@ -61,8 +62,8 @@ export const useMovementController = (
               ...snakePosition,
               {
                 positionX: lastPixel.positionX - pixelSize,
-                positionY: lastPixel.positionY
-              }
+                positionY: lastPixel.positionY,
+              },
             ];
           } else {
             // going left
@@ -70,8 +71,8 @@ export const useMovementController = (
               ...snakePosition,
               {
                 positionX: lastPixel.positionX + pixelSize,
-                positionY: lastPixel.positionY
-              }
+                positionY: lastPixel.positionY,
+              },
             ];
           }
         }
@@ -82,8 +83,8 @@ export const useMovementController = (
               ...snakePosition,
               {
                 positionX: lastPixel.positionX,
-                positionY: lastPixel.positionY - pixelSize
-              }
+                positionY: lastPixel.positionY - pixelSize,
+              },
             ];
           } else {
             // going down
@@ -91,8 +92,8 @@ export const useMovementController = (
               ...snakePosition,
               {
                 positionX: lastPixel.positionX,
-                positionY: lastPixel.positionY + pixelSize
-              }
+                positionY: lastPixel.positionY + pixelSize,
+              },
             ];
           }
         }
@@ -121,40 +122,40 @@ export const useMovementController = (
 
     switch (direction) {
       case Direction.UP:
-        return setSnakePosition(prevPosition => {
+        return setSnakePosition((prevPosition) => {
           const firstPixel = prevPosition[0];
           return updateSnakePositionArray(prevPosition, {
             positionX: firstPixel.positionX,
-            positionY: firstPixel.positionY + pixelSize
+            positionY: firstPixel.positionY + pixelSize,
           });
         });
       case Direction.DOWN:
-        return setSnakePosition(prevPosition => {
+        return setSnakePosition((prevPosition) => {
           const firstPixel = prevPosition[0];
           return updateSnakePositionArray(prevPosition, {
             positionX: firstPixel.positionX,
-            positionY: firstPixel.positionY - pixelSize
+            positionY: firstPixel.positionY - pixelSize,
           });
         });
       case Direction.LEFT:
-        return setSnakePosition(prevPosition => {
+        return setSnakePosition((prevPosition) => {
           const firstPixel = prevPosition[0];
           return updateSnakePositionArray(prevPosition, {
             positionX: firstPixel.positionX - pixelSize,
-            positionY: firstPixel.positionY
+            positionY: firstPixel.positionY,
           });
         });
       case Direction.RIGHT:
-        return setSnakePosition(prevPosition => {
+        return setSnakePosition((prevPosition) => {
           const firstPixel = prevPosition[0];
           return updateSnakePositionArray(prevPosition, {
             positionX: firstPixel.positionX + pixelSize,
-            positionY: firstPixel.positionY
+            positionY: firstPixel.positionY,
           });
         });
 
       default:
-        return setSnakePosition(prevPosition => prevPosition);
+        return setSnakePosition((prevPosition) => prevPosition);
     }
   }, [direction, checkForFood, pixelSize]);
 
@@ -185,6 +186,6 @@ export const useMovementController = (
 
   return {
     snake: { snakePosition, setSnakePosition },
-    food: { foodPosition, setFoodPosition }
+    food: { foodPosition, setFoodPosition },
   };
 };

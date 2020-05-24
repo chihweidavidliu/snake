@@ -9,17 +9,17 @@ interface IPixelWrapperProps {
   isGameStarted: boolean;
 }
 
-const PixelWrapper = styled.div.attrs<IPixelWrapperProps>(props => ({
+const PixelWrapper = styled.div.attrs<IPixelWrapperProps>((props) => ({
   style: {
     left: `${props.left}px` || "0px",
-    bottom: `${props.bottom}px` || "0px"
-  }
+    bottom: `${props.bottom}px` || "0px",
+  },
 }))<IPixelWrapperProps>`
   position: absolute;
-  width: ${props => `${props.size}px`};
-  height: ${props => `${props.size}px`};
-  background: ${props => (props.isGameStarted ? "black" : "grey")};
-  transition: all 0.3s;
+  width: ${(props) => `${props.size}px`};
+  height: ${(props) => `${props.size}px`};
+  background: ${(props) => (props.isGameStarted ? "black" : "grey")};
+  // transition: all 0.1s;
 `;
 
 interface IPixelProps {

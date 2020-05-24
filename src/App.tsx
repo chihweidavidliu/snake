@@ -92,17 +92,34 @@ export default function App() {
   // track coordinates and end game if snake is out of bounds
   useEffect(() => {
     const checkForOutOfBounds = (snakePosition: IPosition[]) => {
+      const firstPixel = snakePosition[0];
+      // if (firstPixel.positionX < 0) {
+      //   console.log("went off left");
+      // }
+      // if (firstPixel.positionX > areaSize) {
+      //   console.log("firstPixel", firstPixel);
+      //   console.log("areaSize", areaSize);
+      //   console.log("went off right");
+      // }
+      // if (firstPixel.positionY < 0) {
+      //   console.log("went off bottom");
+      // }
+      // if (firstPixel.positionY > areaSize) {
+      //   console.log("went off top");
+      // }
       return (
-        snakePosition[0].positionX < 0 ||
-        snakePosition[0].positionX > areaSize ||
-        snakePosition[0].positionY < 0 ||
-        snakePosition[0].positionY > areaSize
+        firstPixel.positionX < 0 ||
+        firstPixel.positionX > areaSize ||
+        firstPixel.positionY < 0 ||
+        firstPixel.positionY > areaSize
       );
     };
 
+    const outOfBounds = checkForOutOfBounds(snakePosition);
+    console.log("outOfBounds", outOfBounds);
     const overlaps = checkForOverlap(snakePosition[0], snakePosition.slice(1));
 
-    if (checkForOutOfBounds(snakePosition) || overlaps) {
+    if (outOfBounds || overlaps) {
       setIsStarted(() => false);
     }
   }, [snakePosition]);

@@ -5,7 +5,7 @@ export const checkForOverlap = (
   otherPixels: IPosition[]
 ) => {
   const clash = otherPixels.find(
-    pixel =>
+    (pixel) =>
       pixel.positionX === pixelToTest.positionX &&
       pixel.positionY === pixelToTest.positionY
   );
