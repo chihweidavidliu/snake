@@ -3,6 +3,7 @@ import { IPosition } from "../types/position";
 import { generateRandomPosition } from "../util/generateRandomPosition";
 import { Direction } from "../types/direction";
 import { Difficulty } from "../types/difficulty";
+import { mapDifficultyToInterval } from "../util/mapDifficultyToInterval";
 
 export const useMovementController = (
   isStarted: boolean,
@@ -176,20 +177,6 @@ export const useMovementController = (
 
   // movement
   useEffect(() => {
-    const mapDifficultyToInterval = (difficulty: Difficulty) => {
-      switch (difficulty) {
-        case Difficulty.EASY:
-          return 100;
-        case Difficulty.MEDIUM:
-          return 75;
-        case Difficulty.HARD:
-          return 50;
-        case Difficulty.SUPERHUMAN:
-          return 25;
-        default:
-          return 500;
-      }
-    };
     if (isStarted) {
       const interval = setInterval(() => {
         handleMove();
