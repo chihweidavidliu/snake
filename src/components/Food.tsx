@@ -37,14 +37,12 @@ const Food = () => {
     <>
       {foodPosition.map((food: IPosition, index) => {
         return (
-          <>
-            <Apple
-              key={`${index}-food`}
-              left={food.positionX}
-              bottom={food.positionY}
-              size={pixelSize}
-            ></Apple>
-          </>
+          <Apple
+            key={`${index}-food`}
+            left={food.positionX}
+            bottom={food.positionY}
+            size={pixelSize}
+          />
         );
       })}
     </>

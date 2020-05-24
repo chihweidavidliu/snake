@@ -73,44 +73,49 @@ interface ITongueProps {
   left: number;
   bottom: number;
 }
-const Tongue = styled.div<ITongueProps>`
+
+const generateTongueStyle = (props: ITongueProps) => {
+  switch (props.direction) {
+    case Direction.UP:
+      return {
+        height: "5px",
+        width: "2px",
+        left: `${props.left + 9}px`,
+        bottom: `${props.bottom + 19}px`,
+      };
+    case Direction.DOWN:
+      return {
+        height: "5px",
+        width: "2px",
+        left: `${props.left + 9}px`,
+        bottom: `${props.bottom - 4}px`,
+      };
+    case Direction.RIGHT:
+      return {
+        height: "2px",
+        width: "5px",
+        left: `${props.left + 19}px`,
+        bottom: `${props.bottom + 9}px`,
+      };
+    case Direction.LEFT:
+      return {
+        height: "2px",
+        width: "5px",
+        left: `${props.left - 5}px`,
+        bottom: `${props.bottom + 9}px`,
+      };
+    default:
+      return "";
+  }
+};
+
+const Tongue = styled.div.attrs<ITongueProps>((props) => {
+  return {
+    style: generateTongueStyle(props),
+  };
+})<ITongueProps>`
   position: absolute;
   background: red;
-  ${(props) => {
-    switch (props.direction) {
-      case Direction.UP:
-        return css`
-          height: 5px;
-          width: 2px;
-          left: ${props.left + 9}px;
-          bottom: ${props.bottom + 19}px;
-        `;
-      case Direction.DOWN:
-        return css`
-          height: 5px;
-          width: 2px;
-          left: ${props.left + 9}px;
-          bottom: ${props.bottom - 4}px;
-        `;
-      case Direction.RIGHT:
-        return css`
-          height: 2px;
-          width: 5px;
-          left: ${props.left + 19}px;
-          bottom: ${props.bottom + 9}px;
-        `;
-
-      case Direction.LEFT:
-        return css`
-          height: 2px;
-          width: 5px;
-          left: ${props.left - 5}px;
-          bottom: ${props.bottom + 9}px;
-        `;
-      default:
-        return "";
-    }
-  }}
 `;
 
 interface IPixelProps {
