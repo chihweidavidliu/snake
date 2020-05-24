@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import shortid from "shortid";
 import styled from "styled-components";
 import { useGameContext } from "../context/GameContext";
+import { useHighScores } from "../hooks/useHighScores";
 
 const ScoresWrapper = styled.div`
   width: 300px;
@@ -21,7 +23,8 @@ const CurrentScore = styled.h2`
 `;
 
 const Scores = () => {
-  const { snakePosition } = useGameContext();
+  const { snakePosition, difficulty } = useGameContext();
+  const { highScores } = useHighScores();
 
   return (
     <ScoresWrapper>
@@ -31,7 +34,14 @@ const Scores = () => {
       </div>
 
       <div>
-        <H2>High Scores</H2>
+        <H2>Top 10 Scores ({difficulty})</H2>
+        {highScores.map((score) => {
+          return (
+            <div key={shortid.generate()}>
+              {score.name}: {score.finalScore}
+            </div>
+          );
+        })}
       </div>
     </ScoresWrapper>
   );

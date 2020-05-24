@@ -14,6 +14,10 @@ import { useMovementController } from "./hooks/useMovementController";
 import { GameContext } from "./context/GameContext";
 import { checkForOverlap } from "./util/checkForOverlap";
 import Scores from "./components/Scores";
+import HighScoresModal from "./components/HighScoresModal";
+import { Button } from "./components/Button";
+import { useHighScores } from "./hooks/useHighScores";
+import { IHighScores, IScore } from "./types/highScores";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -54,27 +58,6 @@ const AppWrapper = styled.div`
   grid-gap: 20px;
   background: ${(props) => props.theme.primaryColour};
   justify-items: center;
-`;
-
-const StartButton = styled.button`
-  width: 100px;
-  height: 50px;
-  align-self: center;
-  justify-self: center;
-  background: none;
-  color: white;
-  border: 3px solid white;
-  border-radius: 25px;
-  font-size: 24px;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    color: #51ac30;
-    border: 3px solid #51ac30;
-    outline: none;
-  }
-  transition: all 0.2s;
 `;
 
 const MainContent = styled.div`
@@ -129,6 +112,9 @@ export default function App() {
   const [isStarted, setIsStarted] = useState(false);
   const [difficulty, setDifficulty] = useState(Difficulty.MEDIUM);
   const [countdown, setCountdown] = useState(0);
+  const [isFinalScoreModalOpen, setIsFinalScoreModalOpen] = useState(false);
+  const [finalScore, setFinalScore] = useState<number | null>(null);
+  const { highScores } = useHighScores();
 
   const { direction, setDirection } = useDirectionController();
   const { food, snake } = useMovementController(
@@ -146,6 +132,7 @@ export default function App() {
   useEffect(() => {
     if (!isStarted) {
       setDirection(Direction.RIGHT);
+
       setSnakePosition([
         {
           positionX: midpoint,
@@ -178,10 +165,31 @@ export default function App() {
       snakePosition.slice(1)
     );
 
+    const checkIsHighScore = (highScores: IScore[], score: number) => {
+      if (
+        highScores.length < 10 ||
+        highScores.find((highScore: IScore) => highScore.finalScore < score)
+      ) {
+        return true;
+      }
+
+      return false;
+    };
+
     if (outOfBounds || snakeOverlapsItself) {
+      const isHighScore = checkIsHighScore(
+        highScores,
+        snakePosition.length - 2
+      );
+
+      if (isHighScore) {
+        setFinalScore(snakePosition.length - 2);
+        setIsFinalScoreModalOpen(true);
+      }
+
       setIsStarted(() => false);
     }
-  }, [snakePosition]);
+  }, [difficulty, finalScore, highScores, snakePosition]);
 
   return (
     <GameContext.Provider
@@ -198,6 +206,11 @@ export default function App() {
         setFoodPosition: (position: IPosition[]) => setFoodPosition(position),
         difficulty,
         setDifficulty: (difficulty: Difficulty) => setDifficulty(difficulty),
+        finalScore,
+        setFinalScore: (finalScore: number | null) => setFinalScore(finalScore),
+        isFinalScoreModalOpen,
+        setIsFinalScoreModalOpen: (isOpen: boolean) =>
+          setIsFinalScoreModalOpen(isOpen),
       }}
     >
       <GlobalStyle />
@@ -206,7 +219,7 @@ export default function App() {
           <H1>Snake</H1>
 
           <OptionsWrapper>
-            <StartButton
+            <Button
               onClick={() => {
                 let numOfSeconds = 3;
                 const timer = setInterval(countDown, 1000);
@@ -226,7 +239,7 @@ export default function App() {
               }}
             >
               Start
-            </StartButton>
+            </Button>
 
             <RadioWrapper>
               <DifficultyRadio difficultyLevel={Difficulty.EASY} />
@@ -249,6 +262,10 @@ export default function App() {
             </Border>
             <Scores />
           </MainContent>
+          {isFinalScoreModalOpen && finalScore !== null && (
+            <HighScoresModal finalScore={finalScore} />
+          )}
+          {/* <HighScoresModal finalScore={finalScore || 4} /> */}
         </AppWrapper>
       </ThemeProvider>
     </GameContext.Provider>

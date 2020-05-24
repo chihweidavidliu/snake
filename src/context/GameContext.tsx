@@ -16,6 +16,10 @@ interface IGameContextProps {
   setFoodPosition: (position: IPosition[]) => void;
   difficulty: Difficulty;
   setDifficulty: (difficulty: Difficulty) => void;
+  finalScore: number | null;
+  setFinalScore: (score: number | null) => void;
+  isFinalScoreModalOpen: boolean;
+  setIsFinalScoreModalOpen: (isOpen: boolean) => void;
 }
 
 const initialprops: IGameContextProps = {
@@ -30,7 +34,11 @@ const initialprops: IGameContextProps = {
   foodPosition: [],
   setFoodPosition: () => {},
   difficulty: Difficulty.MEDIUM,
-  setDifficulty: () => {}
+  setDifficulty: () => {},
+  finalScore: null,
+  setFinalScore: () => {},
+  isFinalScoreModalOpen: false,
+  setIsFinalScoreModalOpen: () => {},
 };
 
 const GameContext = createContext(initialprops);
