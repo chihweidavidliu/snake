@@ -89,6 +89,10 @@ const Countdown = styled.div<{ areaSize: number }>`
   font-weight: bold;
 `;
 
+const TitleWrapper = styled.div`
+  text-align: center;
+`;
+
 const OptionsWrapper = styled.div`
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -213,7 +217,10 @@ export default function App() {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <AppWrapper className="App">
-          <H1>Snake</H1>
+          <TitleWrapper>
+            <H1>Snake</H1>
+            <p>Use the arrow keys to move</p>
+          </TitleWrapper>
 
           <OptionsWrapper>
             <Button
