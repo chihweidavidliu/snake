@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createRef } from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import DifficultyRadio from "./components/DifficultyRadio";
@@ -18,6 +18,9 @@ import HighScoresModal from "./components/HighScoresModal";
 import { Button } from "./components/Button";
 import { useHighScores } from "./hooks/useHighScores";
 import { IScore } from "./types/highScores";
+
+const appleSound = require("./assets/apple.mp3");
+const levelUpSound = require("./assets/levelUp.mp3");
 
 const GlobalStyle = createGlobalStyle`
 html {
@@ -110,6 +113,8 @@ export default function App() {
   const pixelSize = 20;
   const areaSize = 600;
   const midpoint = Math.round(areaSize / 2);
+  const [appleAudioRef] = useState(createRef<HTMLAudioElement>());
+  const [levelUpAudioRef] = useState(createRef<HTMLAudioElement>());
   const [isStarted, setIsStarted] = useState(false);
   const [difficulty, setDifficulty] = useState(Difficulty.MEDIUM);
   const [countdown, setCountdown] = useState(0);
@@ -123,7 +128,9 @@ export default function App() {
     pixelSize,
     areaSize,
     direction,
-    difficulty
+    difficulty,
+    appleAudioRef,
+    levelUpAudioRef
   );
 
   const { snakePosition, setSnakePosition } = snake;
@@ -216,6 +223,8 @@ export default function App() {
     >
       <GlobalStyle />
       <ThemeProvider theme={theme}>
+        <audio src={appleSound} ref={appleAudioRef}></audio>
+        <audio src={levelUpSound} ref={levelUpAudioRef}></audio>
         <AppWrapper className="App">
           <TitleWrapper>
             <H1>Snake</H1>

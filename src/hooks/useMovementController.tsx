@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, RefObject } from "react";
 import { IPosition } from "../types/position";
 import { generateRandomPosition } from "../util/generateRandomPosition";
 import { Direction } from "../types/direction";
@@ -9,7 +9,9 @@ export const useMovementController = (
   pixelSize: number,
   areaSize: number,
   direction: Direction,
-  difficulty: Difficulty
+  difficulty: Difficulty,
+  appleAudioRef: RefObject<HTMLAudioElement>,
+  levelUpAudioRef: RefObject<HTMLAudioElement>
 ) => {
   const midpoint = Math.round(areaSize / 2);
 
@@ -41,6 +43,19 @@ export const useMovementController = (
       const hasEatenFood = filteredFood.length < foodPosition.length;
 
       if (hasEatenFood) {
+        if (appleAudioRef?.current?.volume) {
+          appleAudioRef.current.volume = 0.4;
+        }
+
+        appleAudioRef?.current?.play();
+
+        if ((snakePosition.length - 1) % 10 === 0) {
+          if (levelUpAudioRef?.current?.volume) {
+            levelUpAudioRef.current.volume = 0.4;
+          }
+          levelUpAudioRef?.current?.play();
+        }
+
         setFoodPosition(() => [
           ...filteredFood,
           generateRandomPosition(areaSize, pixelSize),
@@ -101,7 +116,7 @@ export const useMovementController = (
 
       return snakePosition;
     },
-    [foodPosition, areaSize, pixelSize]
+    [foodPosition, appleAudioRef, levelUpAudioRef, areaSize, pixelSize]
   );
 
   const handleMove = useCallback(() => {

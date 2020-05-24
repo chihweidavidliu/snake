@@ -11,6 +11,7 @@ const Snake = () => {
         return (
           <Pixel
             key={`pixel-number-${index}`}
+            index={index}
             positionX={positionX}
             positionY={positionY}
           />

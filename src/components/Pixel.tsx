@@ -7,6 +7,7 @@ interface IPixelWrapperProps {
   bottom?: number;
   size: number;
   isGameStarted: boolean;
+  index: number;
 }
 
 const PixelWrapper = styled.div.attrs<IPixelWrapperProps>((props) => ({
@@ -18,19 +19,23 @@ const PixelWrapper = styled.div.attrs<IPixelWrapperProps>((props) => ({
   position: absolute;
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
-  background: ${(props) => (props.isGameStarted ? "black" : "grey")};
+  background: ${(props) => (props.isGameStarted ? "#567f35" : "grey")};
+  border: 1px solid white;
+  border-radius: 5px;
 `;
 
 interface IPixelProps {
   positionX: number;
   positionY: number;
+  index: number;
 }
 
-const Pixel = ({ positionX, positionY }: IPixelProps) => {
+const Pixel = ({ positionX, positionY, index }: IPixelProps) => {
   const { isStarted, pixelSize } = useGameContext();
 
   return (
     <PixelWrapper
+      index={index}
       left={positionX}
       bottom={positionY}
       size={pixelSize}

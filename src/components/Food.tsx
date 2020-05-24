@@ -23,7 +23,6 @@ const Apple = styled.div<IAppleProps>`
   &::after {
     content: "";
     position: absolute;
-    z-index: 10;
     height: 10px;
     width: 10px;
     left: 7px;
