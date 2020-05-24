@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import DifficultyRadio from "./components/DifficultyRadio";
 import Snake from "./components/Snake";
@@ -16,6 +16,8 @@ import { checkForOverlap } from "./util/checkForOverlap";
 import Scores from "./components/Scores";
 
 const GlobalStyle = createGlobalStyle`
+
+
 
 html {
   box-sizing: border-box;
@@ -34,6 +36,10 @@ html {
   }
 `;
 
+const theme = {
+  primaryColour: "#00404f",
+};
+
 const H1 = styled.h1`
   margin: 0;
   margin-top: 10px;
@@ -44,9 +50,9 @@ const AppWrapper = styled.div`
   min-height: 100vh;
   min-width: 100vw;
   display: grid;
-  grid-template-rows: max-content max-content 1fr;
+  grid-template-rows: max-content max-content max-content;
   grid-gap: 20px;
-  background: #00404f;
+  background: ${(props) => props.theme.primaryColour};
   justify-items: center;
 `;
 
@@ -78,12 +84,29 @@ const MainContent = styled.div`
   grid-gap: 30px;
 `;
 
+const Border = styled.div`
+  border: 2px solid lightgrey;
+  padding: 5px;
+  border-radius: 4px;
+`;
+
 const PlayArea = styled.div<{ size: number }>`
   position: relative;
   width: ${(props) => `${props.size}px`};
   height: ${(props) => `${props.size}px`};
   background-color: white;
   overflow: hidden;
+  border-radius: 4px;
+`;
+
+const Countdown = styled.div<{ areaSize: number }>`
+  position: absolute;
+  color: ${(props) => props.theme.primaryColour};
+  top: 30px;
+  left: ${(props) => `${Math.floor(props.areaSize / 2 - 10)}px`};
+  justify-self: center;
+  font-size: 120px;
+  font-weight: bold;
 `;
 
 const OptionsWrapper = styled.div`
@@ -105,6 +128,7 @@ export default function App() {
   const midpoint = Math.round(areaSize / 2);
   const [isStarted, setIsStarted] = useState(false);
   const [difficulty, setDifficulty] = useState(Difficulty.MEDIUM);
+  const [countdown, setCountdown] = useState(0);
 
   const { direction, setDirection } = useDirectionController();
   const { food, snake } = useMovementController(
@@ -177,28 +201,56 @@ export default function App() {
       }}
     >
       <GlobalStyle />
-      <AppWrapper className="App">
-        <H1>Snake</H1>
+      <ThemeProvider theme={theme}>
+        <AppWrapper className="App">
+          <H1>Snake</H1>
 
-        <OptionsWrapper>
-          <StartButton onClick={() => setIsStarted(true)}>Start</StartButton>
+          <OptionsWrapper>
+            <StartButton
+              onClick={() => {
+                let numOfSeconds = 3;
+                const timer = setInterval(countDown, 1000);
 
-          <RadioWrapper>
-            <DifficultyRadio difficultyLevel={Difficulty.EASY} />
-            <DifficultyRadio difficultyLevel={Difficulty.MEDIUM} />
-            <DifficultyRadio difficultyLevel={Difficulty.HARD} />
-            <DifficultyRadio difficultyLevel={Difficulty.SUPERHUMAN} />
-          </RadioWrapper>
-        </OptionsWrapper>
+                setCountdown(numOfSeconds);
 
-        <MainContent>
-          <PlayArea size={areaSize}>
-            <Food />
-            <Snake />
-          </PlayArea>
-          <Scores />
-        </MainContent>
-      </AppWrapper>
+                function countDown() {
+                  numOfSeconds--;
+                  if (numOfSeconds === 0) {
+                    setIsStarted(true);
+                    setCountdown(0);
+                    return clearInterval(timer);
+                  }
+
+                  setCountdown(numOfSeconds);
+                }
+              }}
+            >
+              Start
+            </StartButton>
+
+            <RadioWrapper>
+              <DifficultyRadio difficultyLevel={Difficulty.EASY} />
+              <DifficultyRadio difficultyLevel={Difficulty.MEDIUM} />
+              <DifficultyRadio difficultyLevel={Difficulty.HARD} />
+              <DifficultyRadio difficultyLevel={Difficulty.SUPERHUMAN} />
+            </RadioWrapper>
+          </OptionsWrapper>
+
+          <MainContent>
+            <Border>
+              <PlayArea size={areaSize}>
+                <Food />
+                <Snake />
+              </PlayArea>
+
+              {!isStarted && countdown > 0 && (
+                <Countdown areaSize={areaSize}>{countdown}</Countdown>
+              )}
+            </Border>
+            <Scores />
+          </MainContent>
+        </AppWrapper>
+      </ThemeProvider>
     </GameContext.Provider>
   );
 }
