@@ -20,7 +20,6 @@ const Radio = styled.span`
   width: 30px;
   border-radius: 15px;
   border: 3px solid white;
-  padding: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,10 +27,12 @@ const Radio = styled.span`
 
 const RadioCheck = styled.span<{ isSelected?: boolean }>`
   ${(props) => !props.isSelected && `display: none;`}
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
   background: white;
+  align-self: center;
+  justify-self: center;
   animation: ${(props) => (props.isSelected ? `fadein 0.3s` : `fadeout 0.3s`)};
 
   @keyframes fadein {
