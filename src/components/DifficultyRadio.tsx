@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Difficulty } from "../types/difficulty";
 import { useGameContext } from "../context/GameContext";
 
@@ -15,25 +15,28 @@ const Wrapper = styled.div`
   cursor: pointer;
 `;
 
-const Radio = styled.span`
+const Radio = styled.span<{ isChecked?: boolean }>`
+  position: relative;
   height: 30px;
   width: 30px;
   border-radius: 15px;
   border: 3px solid white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
-const RadioCheck = styled.span<{ isSelected?: boolean }>`
-  ${(props) => !props.isSelected && `display: none;`}
-  width: 18px;
-  height: 18px;
-  border-radius: 9px;
-  background: white;
-  align-self: center;
-  justify-self: center;
-  animation: ${(props) => (props.isSelected ? `fadein 0.3s` : `fadeout 0.3s`)};
+  ${(props) =>
+    props.isChecked &&
+    css`
+      &::after {
+        position: absolute;
+        content: "";
+        width: 18px;
+        height: 18px;
+        background: white;
+        border-radius: 9px;
+        animation: fadein 0.3s;
+        top: 3px;
+        left: 3px;
+      }
+    `}
 
   @keyframes fadein {
     from {
@@ -43,24 +46,13 @@ const RadioCheck = styled.span<{ isSelected?: boolean }>`
       opacity: 1;
     }
   }
-
-  @keyframes fadeout {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
 `;
 
 const DifficultyRadio = ({ difficultyLevel }: IDifficultyRadioProps) => {
   const { difficulty, setDifficulty, isStarted } = useGameContext();
   return (
     <Wrapper onClick={() => !isStarted && setDifficulty(difficultyLevel)}>
-      <Radio>
-        <RadioCheck isSelected={difficultyLevel === difficulty} />
-      </Radio>
+      <Radio isChecked={difficultyLevel === difficulty}></Radio>
       {difficultyLevel}
     </Wrapper>
   );
