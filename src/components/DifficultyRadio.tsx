@@ -20,7 +20,7 @@ const Radio = styled.span`
   width: 30px;
   border-radius: 15px;
   border: 3px solid white;
-  padding: 4px;
+  padding: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
