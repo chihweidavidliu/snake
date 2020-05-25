@@ -11,7 +11,10 @@ export const useDirectionController = () => {
 
       switch (key) {
         case "ArrowUp":
-          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.UP]);
+          if (direction !== Direction.DOWN) {
+            setDirectionsQueue((prevQueue) => [...prevQueue, Direction.UP]);
+          }
+
           return setDirection((prevDirection) => {
             if (prevDirection !== Direction.DOWN) {
               return Direction.UP;
@@ -19,7 +22,9 @@ export const useDirectionController = () => {
             return prevDirection;
           });
         case "ArrowDown":
-          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.DOWN]);
+          if (direction !== Direction.UP) {
+            setDirectionsQueue((prevQueue) => [...prevQueue, Direction.DOWN]);
+          }
           return setDirection((prevDirection) => {
             if (prevDirection !== Direction.UP) {
               return Direction.DOWN;
@@ -27,7 +32,9 @@ export const useDirectionController = () => {
             return prevDirection;
           });
         case "ArrowLeft":
-          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.LEFT]);
+          if (direction !== Direction.RIGHT) {
+            setDirectionsQueue((prevQueue) => [...prevQueue, Direction.LEFT]);
+          }
           return setDirection((prevDirection) => {
             if (prevDirection !== Direction.RIGHT) {
               return Direction.LEFT;
@@ -35,7 +42,9 @@ export const useDirectionController = () => {
             return prevDirection;
           });
         case "ArrowRight":
-          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.RIGHT]);
+          if (direction !== Direction.LEFT) {
+            setDirectionsQueue((prevQueue) => [...prevQueue, Direction.RIGHT]);
+          }
           return setDirection((prevDirection) => {
             if (prevDirection !== Direction.LEFT) {
               return Direction.RIGHT;
@@ -49,7 +58,7 @@ export const useDirectionController = () => {
     document.addEventListener("keydown", handleMove);
 
     return () => document.removeEventListener("keydown", handleMove);
-  }, [setDirection]);
+  }, [direction, setDirection]);
 
   return { direction, setDirection, directionsQueue, setDirectionsQueue };
 };
