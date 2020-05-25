@@ -122,12 +122,19 @@ export default function App() {
   const [finalScore, setFinalScore] = useState<number | null>(null);
   const { highScores } = useHighScores();
 
-  const { direction, setDirection } = useDirectionController();
+  const {
+    direction,
+    setDirection,
+    directionsQueue,
+    setDirectionsQueue,
+  } = useDirectionController();
   const { food, snake } = useMovementController(
     isStarted,
     pixelSize,
     areaSize,
     direction,
+    directionsQueue,
+    setDirectionsQueue,
     difficulty,
     appleAudioRef,
     levelUpAudioRef
@@ -140,6 +147,7 @@ export default function App() {
   useEffect(() => {
     if (!isStarted) {
       setDirection(Direction.RIGHT);
+      setDirectionsQueue([]);
 
       setSnakePosition([
         {
@@ -152,7 +160,7 @@ export default function App() {
         },
       ]);
     }
-  }, [isStarted, midpoint, setDirection, setSnakePosition]);
+  }, [isStarted, midpoint, setDirection, setDirectionsQueue, setSnakePosition]);
 
   // track coordinates and end game if snake is out of bounds
   useEffect(() => {
@@ -210,6 +218,9 @@ export default function App() {
         setSnakePosition: (position: IPosition[]) => setSnakePosition(position),
         direction,
         setDirection: (direction: Direction) => setDirection(direction),
+        directionsQueue,
+        setDirectionsQueue: (directions: Direction[]) =>
+          setDirectionsQueue(directions),
         foodPosition,
         setFoodPosition: (position: IPosition[]) => setFoodPosition(position),
         difficulty,

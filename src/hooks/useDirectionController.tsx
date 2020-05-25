@@ -3,6 +3,7 @@ import { Direction } from "../types/direction";
 
 export const useDirectionController = () => {
   const [direction, setDirection] = useState(Direction.RIGHT);
+  const [directionsQueue, setDirectionsQueue] = useState<Direction[]>([]);
 
   useEffect(() => {
     const handleMove = (e: KeyboardEvent) => {
@@ -10,28 +11,32 @@ export const useDirectionController = () => {
 
       switch (key) {
         case "ArrowUp":
-          return setDirection(prevDirection => {
+          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.UP]);
+          return setDirection((prevDirection) => {
             if (prevDirection !== Direction.DOWN) {
               return Direction.UP;
             }
             return prevDirection;
           });
         case "ArrowDown":
-          return setDirection(prevDirection => {
+          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.DOWN]);
+          return setDirection((prevDirection) => {
             if (prevDirection !== Direction.UP) {
               return Direction.DOWN;
             }
             return prevDirection;
           });
         case "ArrowLeft":
-          return setDirection(prevDirection => {
+          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.LEFT]);
+          return setDirection((prevDirection) => {
             if (prevDirection !== Direction.RIGHT) {
               return Direction.LEFT;
             }
             return prevDirection;
           });
         case "ArrowRight":
-          return setDirection(prevDirection => {
+          setDirectionsQueue((prevQueue) => [...prevQueue, Direction.RIGHT]);
+          return setDirection((prevDirection) => {
             if (prevDirection !== Direction.LEFT) {
               return Direction.RIGHT;
             }
@@ -46,5 +51,5 @@ export const useDirectionController = () => {
     return () => document.removeEventListener("keydown", handleMove);
   }, [setDirection]);
 
-  return { direction, setDirection };
+  return { direction, setDirection, directionsQueue, setDirectionsQueue };
 };

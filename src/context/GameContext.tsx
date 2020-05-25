@@ -11,6 +11,8 @@ interface IGameContextProps {
   snakePosition: IPosition[];
   setSnakePosition: (position: IPosition[]) => void;
   direction: Direction;
+  directionsQueue: Direction[];
+  setDirectionsQueue: (directions: Direction[]) => void;
   setDirection: (direction: Direction) => void;
   foodPosition: IPosition[];
   setFoodPosition: (position: IPosition[]) => void;
@@ -30,6 +32,8 @@ const initialprops: IGameContextProps = {
   snakePosition: [],
   setSnakePosition: () => {},
   direction: Direction.RIGHT,
+  directionsQueue: [],
+  setDirectionsQueue: () => {},
   setDirection: () => {},
   foodPosition: [],
   setFoodPosition: () => {},

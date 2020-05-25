@@ -1,4 +1,11 @@
-import { useState, useEffect, useCallback, RefObject } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  RefObject,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { IPosition } from "../types/position";
 import { generateRandomPosition } from "../util/generateRandomPosition";
 import { Direction } from "../types/direction";
@@ -10,6 +17,8 @@ export const useMovementController = (
   pixelSize: number,
   areaSize: number,
   direction: Direction,
+  directionsQueue: Direction[],
+  setDirectionsQueue: Dispatch<SetStateAction<Direction[]>>,
   difficulty: Difficulty,
   appleAudioRef: RefObject<HTMLAudioElement>,
   levelUpAudioRef: RefObject<HTMLAudioElement>
@@ -136,44 +145,55 @@ export const useMovementController = (
       return final;
     };
 
-    switch (direction) {
-      case Direction.UP:
-        return setSnakePosition((prevPosition) => {
-          const firstPixel = prevPosition[0];
-          return updateSnakePositionArray(prevPosition, {
-            positionX: firstPixel.positionX,
-            positionY: firstPixel.positionY + pixelSize,
+    const determineDirection = (direction: Direction) => {
+      switch (direction) {
+        case Direction.UP:
+          return setSnakePosition((prevPosition) => {
+            const firstPixel = prevPosition[0];
+            return updateSnakePositionArray(prevPosition, {
+              positionX: firstPixel.positionX,
+              positionY: firstPixel.positionY + pixelSize,
+            });
           });
-        });
-      case Direction.DOWN:
-        return setSnakePosition((prevPosition) => {
-          const firstPixel = prevPosition[0];
-          return updateSnakePositionArray(prevPosition, {
-            positionX: firstPixel.positionX,
-            positionY: firstPixel.positionY - pixelSize,
+        case Direction.DOWN:
+          return setSnakePosition((prevPosition) => {
+            const firstPixel = prevPosition[0];
+            return updateSnakePositionArray(prevPosition, {
+              positionX: firstPixel.positionX,
+              positionY: firstPixel.positionY - pixelSize,
+            });
           });
-        });
-      case Direction.LEFT:
-        return setSnakePosition((prevPosition) => {
-          const firstPixel = prevPosition[0];
-          return updateSnakePositionArray(prevPosition, {
-            positionX: firstPixel.positionX - pixelSize,
-            positionY: firstPixel.positionY,
+        case Direction.LEFT:
+          return setSnakePosition((prevPosition) => {
+            const firstPixel = prevPosition[0];
+            return updateSnakePositionArray(prevPosition, {
+              positionX: firstPixel.positionX - pixelSize,
+              positionY: firstPixel.positionY,
+            });
           });
-        });
-      case Direction.RIGHT:
-        return setSnakePosition((prevPosition) => {
-          const firstPixel = prevPosition[0];
-          return updateSnakePositionArray(prevPosition, {
-            positionX: firstPixel.positionX + pixelSize,
-            positionY: firstPixel.positionY,
+        case Direction.RIGHT:
+          return setSnakePosition((prevPosition) => {
+            const firstPixel = prevPosition[0];
+            return updateSnakePositionArray(prevPosition, {
+              positionX: firstPixel.positionX + pixelSize,
+              positionY: firstPixel.positionY,
+            });
           });
-        });
 
-      default:
-        return setSnakePosition((prevPosition) => prevPosition);
+        default:
+          return setSnakePosition((prevPosition) => prevPosition);
+      }
+    };
+
+    // prioritise directions queue
+    if (directionsQueue.length) {
+      const nextDirection = directionsQueue[0];
+      determineDirection(nextDirection);
+      return setDirectionsQueue(directionsQueue.slice(1));
     }
-  }, [direction, checkForFood, pixelSize]);
+
+    return determineDirection(direction);
+  }, [direction, directionsQueue, checkForFood, pixelSize, setDirectionsQueue]);
 
   // movement
   useEffect(() => {
