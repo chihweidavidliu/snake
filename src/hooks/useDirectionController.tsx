@@ -7,6 +7,7 @@ export const useDirectionController = () => {
 
   useEffect(() => {
     const handleMove = (e: KeyboardEvent) => {
+      e.preventDefault();
       const { key } = e;
 
       switch (key) {
