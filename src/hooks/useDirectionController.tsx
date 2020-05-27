@@ -7,11 +7,11 @@ export const useDirectionController = () => {
 
   useEffect(() => {
     const handleMove = (e: KeyboardEvent) => {
-      e.preventDefault();
       const { key } = e;
 
       switch (key) {
         case "ArrowUp":
+          e.preventDefault();
           if (direction !== Direction.DOWN) {
             setDirectionsQueue((prevQueue) => [...prevQueue, Direction.UP]);
           }
@@ -23,6 +23,7 @@ export const useDirectionController = () => {
             return prevDirection;
           });
         case "ArrowDown":
+          e.preventDefault();
           if (direction !== Direction.UP) {
             setDirectionsQueue((prevQueue) => [...prevQueue, Direction.DOWN]);
           }
@@ -33,6 +34,7 @@ export const useDirectionController = () => {
             return prevDirection;
           });
         case "ArrowLeft":
+          e.preventDefault();
           if (direction !== Direction.RIGHT) {
             setDirectionsQueue((prevQueue) => [...prevQueue, Direction.LEFT]);
           }
@@ -43,6 +45,7 @@ export const useDirectionController = () => {
             return prevDirection;
           });
         case "ArrowRight":
+          e.preventDefault();
           if (direction !== Direction.LEFT) {
             setDirectionsQueue((prevQueue) => [...prevQueue, Direction.RIGHT]);
           }
