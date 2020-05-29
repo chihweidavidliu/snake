@@ -46,7 +46,6 @@ const theme = {
 
 const H1 = styled.h1`
   margin: 0;
-  margin-top: 30px;
   font-size: 36px;
 `;
 
@@ -58,6 +57,7 @@ const AppWrapper = styled.div`
   grid-gap: 20px;
   background: ${(props) => props.theme.primaryColour};
   justify-items: center;
+  padding: 40px;
 `;
 
 const MainContent = styled.div`
